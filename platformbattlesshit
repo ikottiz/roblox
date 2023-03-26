@@ -1,0 +1,197 @@
+local players = game.Players
+local player = players.LocalPlayer
+local partVisible = function(part)
+    if part.Transparency == 0 then
+        return true
+    end
+    return false
+end
+local lib = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/Vape.txt")()
+local ns = loadstring(game:HttpGet("https://pastebin.com/raw/LrURYVfr"))()
+
+local win = lib:Window("AUTISM-WARE",Color3.fromRGB(44, 120, 224), Enum.KeyCode.RightControl)
+
+local main = win:Tab("Main")
+local misc = win:Tab("Misc")
+
+main:Toggle("Auto-parry",false, function(value)
+    local parry = {
+        [1] = true,
+        [2] = true
+    }
+    local mt = getrawmetatable(game)
+    local old_namecall = mt.__namecall
+    setreadonly(mt,false)
+    mt.__namecall = newcclosure(function(...)
+        local args = {...}
+        local self = args[1]
+        local method = getnamecallmethod()
+        if not checkcaller() and method == "FireServer" then
+            if (self.Name == 'Block' and value) then
+                return old_namecall(self,unpack(parry))
+            end
+            return old_namecall(...)
+        end
+        return old_namecall(...)
+    end)
+    setreadonly(mt, true)
+end)
+main:Toggle("Auto crystal pick up",false, function(value)
+    local function pickup_crystal(part)
+        local pickup = part:WaitForChild("ClickDetector")
+        local activation_distance = pickup.MaxActivationDistance
+
+        task.spawn(function()
+            while not value or not player.Character or not player.Character:FindFirstChild("Head") or player:DistanceFromCharacter(part.Position) > activation_distance do 
+                wait(0.1)
+            end
+            
+            repeat
+                local character = player.Character
+                
+                if character and character:FindFirstChild("Head") and player:DistanceFromCharacter(part.Position) <= activation_distance then
+                    fireclickdetector(pickup)
+                end
+
+                wait(0.1)
+            until not partVisible(part)
+        end)
+    end 
+
+    for index, crystal in next, game:GetService("Workspace").DriedTundra.CavernTown:GetChildren() do
+        if crystal.Name == 'Crystal' then
+            pickup_crystal(crystal)
+        end
+    end
+end)
+
+main:Toggle("Auto-FNF",false, function(value)
+    local success = {
+        [1] = true,
+    }
+    local mt = getrawmetatable(game)
+    local old_namecall = mt.__namecall
+    setreadonly(mt,false)
+    mt.__namecall = newcclosure(function(...)
+        local args = {...}
+        local self = args[1]
+        local method = getnamecallmethod()
+        if not checkcaller() and method == "FireServer" then
+            if (self.Name == 'Success' and value) then
+                return old_namecall(self,unpack(success))
+            end
+            return old_namecall(...)
+        end
+        return old_namecall(...)
+    end)
+    setreadonly(mt, true)
+end)
+
+main:Toggle("Infinite jump",false, function(value)
+    game.UserInputService.JumpRequest:Connect(function()
+        if value then
+            player.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Jumping)
+        end
+    end)
+end)
+main:Slider("Speedhack",0,250,16, function(t)
+    game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = t
+end)
+main:Slider("Jumppower",0,250,50, function(t)
+    game.Players.LocalPlayer.Character.Humanoid.JumpPower = t
+end)
+
+
+
+misc:Button("Reset", function()
+    player.Character:FindFirstChildOfClass("Humanoid"):ChangeState(Enum.HumanoidStateType.Dead)
+end)
+misc:Button("Rejoin", function()
+    if #players:GetPlayers() <= 1 then
+		player:Kick("\nRejoining...")
+		wait()
+		game:GetService('TeleportService'):Teleport(game.PlaceId, player)
+	else
+		game:GetService('TeleportService'):TeleportToPlaceInstance(game.PlaceId, game.JobId, player)
+	end
+end)
+misc:Toggle("NoFog",false, function(value)
+    game.Lighting.FogEnd = 10000
+    game.Lighting:GetPropertyChangedSignal("FogEnd"):Connect(function()
+        if value then
+            game.Lighting.FogEnd = 10000
+        end
+    end)
+end)
+misc:Toggle("Fullbright",false, function(value)
+    game.Lighting.Brightness = 2
+    game.Lighting:GetPropertyChangedSignal("Brightness"):Connect(function()
+        if value then
+            game.Lighting.Brightness = 2
+        end
+    end)
+end)
+local merchantnoti,merchanttp,stnoti,sttp,desertnoti,deserttp
+misc:Toggle("Merchant Notify",false, function(value)
+    merchantnoti = value
+end)
+misc:Toggle("Auto-merchant TP",false, function(value)
+    if game.Workspace:FindFirstChild("Merchant Stand") then
+        player.Character.HumanoidRootPart.CFrame = CFrame.new(game:GetService("Workspace")["Merchant Stand"]["Traveling Merchant"].HumanoidRootPart.Position)
+    end
+    merchanttp = value
+end)
+misc:Toggle("Soul Trader Notify",false, function(value)
+    stnoti = value
+end)
+misc:Toggle("Soul Trader TP",false, function(value)
+    if game.Workspace:FindFirstChild("Soul Trader") then
+        player.Character.HumanoidRootPart.CFrame = CFrame.new(game:GetService("Workspace")["Soul Trader"].HumanoidRootPart.Position)
+    end
+    sttp = value
+end)
+misc:Toggle("Desert Dungeon Notify",false, function(value)
+    desertnoti = value
+end)
+misc:Toggle("Desert Dungeon TP",false, function(value)
+    if game.Workspace:FindFirstChild("DesertDungeon") then
+        player.Character.HumanoidRootPart.CFrame = CFrame.new(game:GetService("Workspace").DesertDungeon.Floor.Position)
+    end
+    deserttp = value
+end)
+
+game.Workspace.ChildAdded:Connect(function(child)
+    if child.Name == 'Merchant Stand' then
+        if merchantnoti then
+            ns:call_notification('Mechant spawned!')
+        end
+        if merchanttp then
+            player.Character.HumanoidRootPart.CFrame = CFrame.new(game:GetService("Workspace")["Merchant Stand"]["Traveling Merchant"].HumanoidRootPart.Position)
+        end
+    elseif child.Name == 'Soul Trader' then
+        if stnoti then
+            ns:call_notification('Soul trader spawned!')
+        end
+        if sttp then
+            player.Character.HumanoidRootPart.CFrame = CFrame.new(game:GetService("Workspace")["Soul Trader"].HumanoidRootPart.Position)
+        end
+    elseif child.Name == 'Desert Dungeon' then
+        if desertnoti then
+            ns:call_notification('Dungeon spawned!')
+        end
+        if deserttp then
+            player.Character.HumanoidRootPart.CFrame = CFrame.new(game:GetService("Workspace").DesertDungeon.Floor.Position)
+        end
+    end
+end)
+misc:Button("Sell All Crystals", function()
+    local crystals = game.Players.LocalPlayer.Items.Crystal.Value
+    for i = 1,crystals do
+        local args = {
+            [1] = 2,
+            [2] = game.Players.LocalPlayer.Items.Crystal
+        }
+        
+        game.Players.LocalPlayer.PlayerGui.ShopSell.ItemOptions.RemoteEvent2:FireServer(unpack(args))
+    end
+end)
