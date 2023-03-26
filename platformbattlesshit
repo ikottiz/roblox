@@ -1,5 +1,6 @@
 local players = game.Players
 local player = players.LocalPlayer
+game:GetService("Workspace").MythicalForest.ForestFlowers:GetChildren()[139]
 local partVisible = function(part)
     if part.Transparency == 0 then
         return true
@@ -12,6 +13,7 @@ local ns = loadstring(game:HttpGet("https://pastebin.com/raw/LrURYVfr"))()
 local win = lib:Window("AUTISM-WARE",Color3.fromRGB(44, 120, 224), Enum.KeyCode.RightControl)
 
 local main = win:Tab("Main")
+local teleports = win:Tab("Teleports")
 local misc = win:Tab("Misc")
 
 main:Toggle("Auto-parry",false, function(value)
@@ -64,6 +66,34 @@ main:Toggle("Auto crystal pick up",false, function(value)
         end
     end
 end)
+main:Toggle("Auto flower pick up",false, function(value)
+    local function pickup_flower(part)
+        local pickup = part:WaitForChild("ClickDetector")
+        local activation_distance = pickup.MaxActivationDistance
+
+        task.spawn(function()
+            while not value or not player.Character or not player.Character:FindFirstChild("Head") or player:DistanceFromCharacter(part.Position) > activation_distance do 
+                wait(0.1)
+            end
+            
+            repeat
+                local character = player.Character
+                
+                if character and character:FindFirstChild("Head") and player:DistanceFromCharacter(part.Position) <= activation_distance then
+                    fireclickdetector(pickup)
+                end
+
+                wait(0.1)
+            until not partVisible(part)
+        end)
+    end 
+
+    for index, flower in next, game:GetService("Workspace").MythicalForest.ForestFlowers:GetChildren() do
+        if flower.Name == 'EnchantedFlower' then
+            pickup_flower(flower)
+        end
+    end
+end)
 
 main:Toggle("Auto-FNF",false, function(value)
     local success = {
@@ -101,6 +131,22 @@ main:Slider("Jumppower",0,250,50, function(t)
     game.Players.LocalPlayer.Character.Humanoid.JumpPower = t
 end)
 
+teleports:Label("Cities")
+teleports:Button("Teleport to Maperl", function()
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(game:GetService("Workspace").MythicalForest.MaperlCity["General Store"].George.HumanoidRootPart.Position)
+end)
+teleports:Button("Teleport to Randalian", function()
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(game:GetService("Workspace").CaveSystem.Randalian.CaveShop.Jack.HumanoidRootPart.Position)
+end)
+teleports:Button("Teleport to Powder 89", function()
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(game:GetService("Workspace").Desert["Powder 89"].Bar.Prickles.HumanoidRootPart.Position)
+end)
+teleports:Button("Teleport to Cavern Town", function()
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(game:GetService("Workspace").DriedTundra.CavernTown.Jessie.HumanoidRootPart.Position)
+end)
+teleports:Button("Teleport to Mitra", function()
+    player.Character.HumanoidRootPart.CFrame = CFrame.new(game:GetService("Workspace").MythicalForest.MitraEmpire.BardSpot.Keijo.HumanoidRootPart.Position)
+end)
 
 
 misc:Button("Reset", function()
