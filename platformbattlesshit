@@ -6,7 +6,7 @@ local partVisible = function(part)
     end
     return false
 end
-local lib = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/Vape.txt")()
+local lib = loadstring(game:HttpGet"https://raw.githubusercontent.com/ikottiz/roblox/main/vape")()
 local ns = loadstring(game:HttpGet("https://pastebin.com/raw/LrURYVfr"))()
 
 local win = lib:Window("AUTISM-WARE",Color3.fromRGB(44, 120, 224), Enum.KeyCode.RightControl)
