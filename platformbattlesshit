@@ -88,7 +88,7 @@ main:Toggle("Auto flower pick up",false, function(value)
     end 
 
     for index, flower in next, game:GetService("Workspace").MythicalForest.ForestFlowers:GetChildren() do
-        if flower.Name == 'EnchantedFlower' then
+        if flower.Name == 'Enchanted Flower' then
             pickup_flower(flower)
         end
     end
@@ -235,6 +235,17 @@ misc:Button("Sell All Crystals", function()
         local args = {
             [1] = 2,
             [2] = game.Players.LocalPlayer.Items.Crystal
+        }
+        
+        game.Players.LocalPlayer.PlayerGui.ShopSell.ItemOptions.RemoteEvent2:FireServer(unpack(args))
+    end
+end)
+misc:Button("Sell All Flowers", function()
+    local flowers = game.Players.LocalPlayer.Items["Enchanted Flower"].Value
+    for i = 1,flowers do
+        local args = {
+            [1] = 2,
+            [2] = game.Players.LocalPlayer.Items["Enchanted Flower"]
         }
         
         game.Players.LocalPlayer.PlayerGui.ShopSell.ItemOptions.RemoteEvent2:FireServer(unpack(args))
