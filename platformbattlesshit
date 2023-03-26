@@ -1,6 +1,5 @@
 local players = game.Players
 local player = players.LocalPlayer
-game:GetService("Workspace").MythicalForest.ForestFlowers:GetChildren()[139]
 local partVisible = function(part)
     if part.Transparency == 0 then
         return true
