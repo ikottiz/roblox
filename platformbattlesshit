@@ -229,13 +229,6 @@ game.Workspace.ChildAdded:Connect(function(child)
         end
     end
 end)
-misc:Toggle("Auto sprint",false, function(value)
-    while wait() do
-        if value then
-           player.Running.Value = true
-        end
-    end
-end)
 misc:Button("Sell All Crystals", function()
     local crystals = game.Players.LocalPlayer.Items.Crystal.Value
     for i = 1,crystals do
@@ -251,10 +244,10 @@ misc:Button("Sell All Flowers", function()
     local flowers = game.Players.LocalPlayer.Items["Enchanted Flower"].Value
     for i = 1,flowers do
         local args = {
-            [1] = 2,
-            [2] = game.Players.LocalPlayer.Items["Enchanted Flower"]
+            [1] = 5,
+            [2] = player:WaitForChild("Items"):WaitForChild("Enchanted Flower")
         }
         
-        game.Players.LocalPlayer.PlayerGui.ShopSell.ItemOptions.RemoteEvent2:FireServer(unpack(args))
+        player:WaitForChild("PlayerGui"):WaitForChild("ShopSell"):WaitForChild("ItemOptions"):WaitForChild("RemoteEvent2"):FireServer(unpack(args))
     end
 end)
