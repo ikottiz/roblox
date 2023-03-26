@@ -229,6 +229,13 @@ game.Workspace.ChildAdded:Connect(function(child)
         end
     end
 end)
+misc:Toggle("Auto sprint",false, function(value)
+    while wait() do
+        if value then
+           player.Running.Value = true
+        end
+    end
+end)
 misc:Button("Sell All Crystals", function()
     local crystals = game.Players.LocalPlayer.Items.Crystal.Value
     for i = 1,crystals do
