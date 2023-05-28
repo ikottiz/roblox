@@ -201,6 +201,11 @@ library.CreateWindow = function(name,keybind)
 	runService.RenderStepped:Connect(function()
 		PagesListContent.CanvasSize = UDim2.new(0,0,0,PagesListContent.UIListLayout.AbsoluteContentSize.Y)
 	end)
+	userInputService.InputBegan:Connect(function(input)
+		if input == Enum.KeyCode.[keybind] then
+			ScreenGui.Enabled = not ScreenGui.Enabled
+		end
+	end)
 	local WindowFunctions = {}
 	WindowFunctions.CreatePage = function(name,default)
 		local PageButton = create("TextButton",{
