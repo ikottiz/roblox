@@ -7,10 +7,10 @@ local Mouse = LocalPlayer:GetMouse()
 local PresetColor = Color3.fromRGB(44, 120, 224)
 local CloseBind = Enum.KeyCode.RightControl
 
-lib[ui] = Instance.new("ScreenGui")
-lib[ui].Name = "ui"
-lib[ui].Parent = game.CoreGui
-lib[ui].ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+getgenv().VAPEUI = Instance.new("ScreenGui")
+VAPEUI.Name = "ui"
+VAPEUI.Parent = game.CoreGui
+VAPEUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 coroutine.wrap(
     function()
@@ -97,7 +97,7 @@ function lib:Window(text, preset, closebind)
     local DragFrame = Instance.new("Frame")
 
     Main.Name = "Main"
-    Main.Parent = lib[ui]
+    Main.Parent = VAPEUI
     Main.AnchorPoint = Vector2.new(0.5, 0.5)
     Main.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     Main.BorderSizePixel = 0
@@ -148,7 +148,7 @@ function lib:Window(text, preset, closebind)
                     Main:TweenSize(UDim2.new(0, 0, 0, 0), Enum.EasingDirection.Out, Enum.EasingStyle.Quart, .6, true)
                     uitoggled = true
                     wait(.5)
-                    lib[ui].Enabled = false
+                    VAPEUI.Enabled = false
                 else
                     Main:TweenSize(
                         UDim2.new(0, 560, 0, 319),
@@ -157,7 +157,7 @@ function lib:Window(text, preset, closebind)
                         .6,
                         true
                     )
-                    lib[ui].Enabled = true
+                    VAPEUI.Enabled = true
                     uitoggled = false
                 end
             end
